@@ -6,7 +6,7 @@ export default function Layout({ title, children }) {
   return (
     <>
       <Head>
-        <title>{title ? title + ' - EtherealSun' : 'EtherealSun'}</title>
+        <title>{title ? title + ' | EtherealSun' : 'EtherealSun'}</title>
         <meta name="description" content="Ethereal Sun Designs Jewelry" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
