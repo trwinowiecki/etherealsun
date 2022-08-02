@@ -44,7 +44,7 @@ export default function Layout({ title, children }) {
         </header>
         <main className="container m-auto mt-4 px-4">{children}</main>
         <footer className="flex justify-center items-center h-10 shadow-inner">
-          <p>Copyright &copy; EtherealSunDesigns</p>
+          <p>Copyright &copy; 2022 EtherealSunDesigns</p>
         </footer>
       </div>
     </>
