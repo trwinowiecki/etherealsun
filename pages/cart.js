@@ -24,7 +24,7 @@ function CartPage() {
   };
 
   return (
-    <Layout>
+    <Layout title="Cart">
       <h1 className="mb-4 text-xl">Shopping Cart</h1>
       {cartItems.length === 0 ? (
         <div>
