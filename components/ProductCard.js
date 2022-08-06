@@ -9,8 +9,9 @@ export default function ProductCard({ product }) {
         <a>
           <Image
             src={product.image}
-            width={500}
-            height={500}
+            width={1}
+            height={1}
+            sizes="50vw"
             layout="responsive"
             objectFit="cover"
             alt={product.name}
