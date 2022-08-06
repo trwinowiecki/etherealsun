@@ -76,3 +76,5 @@ export default function PaymentPage() {
     </Layout>
   );
 }
+
+PaymentPage.auth = true;
