@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import CheckoutWizard from '../components/CheckoutWizard';
-import Layout from '../components/layout';
+import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 
 export default function ShippingPage() {

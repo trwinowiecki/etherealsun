@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Link from 'next/Link';
+import Link from 'next/link';
 import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
 import { Menu } from '@headlessui/react';
