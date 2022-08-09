@@ -15,7 +15,7 @@ function reducer(state, action) {
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
     default:
-      state;
+      return state;
   }
 }
 
