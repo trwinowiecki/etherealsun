@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import CheckoutWizard from '../components/CheckoutWizard';
 import { useRouter } from 'next/router';
-import toast from 'react-toastify';
+import { toast } from 'react-toastify';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 import Cookies from 'js-cookie';

@@ -7,7 +7,7 @@ import { XCircleIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import axios from 'axios';
-import toast from 'react-toastify';
+import { toast } from 'react-toastify';
 
 function CartPage() {
   const { state, dispatch } = useContext(Store);
