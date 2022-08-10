@@ -1,6 +1,8 @@
 import bcryptjs from 'bcryptjs';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
+import FacebookProvider from 'next-auth/providers/google';
 import User from '../../../models/User';
 import db from '../../../utils/db';
 
@@ -22,6 +24,15 @@ export default NextAuth({
   },
   providers: [
     CredentialsProvider({
+      name: 'Email and Password',
+      credentials: {
+        email: {
+          label: 'Email',
+          type: 'text',
+          placeholder: 'example@gmail.com',
+        },
+        password: { label: 'Password', type: 'password' },
+      },
       async authorize(credentials) {
         await db.connect();
         const user = await User.findOne({
@@ -39,6 +50,14 @@ export default NextAuth({
         }
         throw new Error('Invalid email or password');
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_ID,
+      clientSecret: process.env.FACEBOOK_SECRET,
     }),
   ],
 });

@@ -11,15 +11,18 @@
   "dependencies": {
     "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^1.0.6",
+    "@square/web-sdk": "^2.0.1",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "js-cookie": "^3.0.1",
     "mongoose": "^6.5.0",
     "next": "12.2.3",
     "next-auth": "^4.10.3",
+    "next-transpile-modules": "^9.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.34.0",
+    "react-square-web-payments-sdk": "^3.2.1",
     "react-toastify": "^9.0.7"
   },
   "devDependencies": {
