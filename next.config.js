@@ -10,6 +10,9 @@ const nextConfig = withTM({
   experimental: {
     esmExternals: 'loose',
   },
+  images: {
+    domains: ['items-images-production.s3.us-west-2.amazonaws.com'],
+  },
 });
 
 module.exports = nextConfig;
