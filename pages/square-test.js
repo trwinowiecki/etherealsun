@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { useContext, useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
 import { getError } from '../utils/error';
-import { SquareClient } from '../utils/SquareClient';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -19,26 +18,16 @@ function reducer(state, action) {
 }
 
 function SquareTest() {
-  const [
-    {
-      loading,
-      error,
-      catalog,
-      // successPay, loadingDeliver, successDeliver
-    },
-    dispatch,
-  ] = useReducer(reducer, {
+  const [{ loading, error, catalog }, dispatch] = useReducer(reducer, {
     loading: true,
     catalog: {},
     error: '',
   });
-  // const { state, dispatch } = useContext(SquareClient);
-  // const { catalog, setCatalog } = useState({});
   useEffect(() => {
     const fetchCatalog = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/square`);
+        const { data } = await axios.post(`/api/square/getAllCatalog`);
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (error) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(error) });

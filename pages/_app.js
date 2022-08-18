@@ -2,12 +2,10 @@ import '../styles/globals.css';
 import { SessionProvider, useSession } from 'next-auth/react';
 import { StoreProvider } from '../utils/Store';
 import { useRouter } from 'next/router';
-import { SquareClientProvider } from '../utils/SquareClient';
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SessionProvider session={session}>
-      {/* <SquareClientProvider> */}
       <StoreProvider>
         {Component.auth ? (
           <Auth>
@@ -17,7 +15,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
           <Component {...pageProps} />
         )}
       </StoreProvider>
-      {/* </SquareClientProvider> */}
     </SessionProvider>
   );
 }
