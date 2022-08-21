@@ -4,18 +4,37 @@ import Layout from '../../components/Layout';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Store } from '../../utils/Store';
-import Product from '../../models/Product';
-import db from '../../utils/db';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
 export default function ProductPage(props) {
-  const { product } = props;
+  const { catalogObjects } = props;
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
 
-  if (!product) {
-    return <Layout title="Product not found">Product not found!</Layout>;
+  if (catalogObjects.errors) {
+    return (
+      <Layout title={catalogObjects.errors[0].code}>
+        {catalogObjects.errors[0].detail}
+      </Layout>
+    );
+  }
+
+  console.log(catalogObjects);
+
+  const product = catalogObjects.object;
+  const images = catalogObjects.relatedObjects.filter(
+    (object) => object.type === 'IMAGE'
+  );
+  const category = catalogObjects.relatedObjects.filter(
+    (object) => object.type === 'CATEGORY'
+  );
+
+  let stock;
+  try {
+    stock = catalogObjects.inventory;
+  } catch (error) {
+    stock = 0;
   }
 
   const addToCartHandler = async () => {
@@ -35,45 +54,47 @@ export default function ProductPage(props) {
   };
 
   return (
-    <Layout title={product.name}>
+    <Layout title={product.itemData.name}>
       <div className="py-2">
         <Link href="/">
           <a className="font-bold">Home</a>
         </Link>{' '}
-        / {product.name}
+        / {product.itemData.name}
       </div>
       <div className="grid md:grid-cols-4 md:gap-3">
         <div className="md:col-span-2">
           <Image
-            src={product.image}
-            alt={product.name}
+            src={images[0].imageData.url}
+            alt={product.itemData.name}
             width={1000}
             height={1000}
             layout="responsive"
             objectFit="cover"
+            priority={true}
           />
         </div>
         <div>
           <ul>
             <li>
-              <h1 className="text-lg">{product.name}</h1>
+              <h1 className="text-lg">{product.itemData.name}</h1>
             </li>
-            <li>Category: {product.category}</li>
-            <li>
-              {product.rating} of {product.numReviews} reviews
-            </li>
-            <li>Description: {product.description}</li>
+            {category ? <li>Category: {category[0].categoryData.name}</li> : ''}
+            <li>Description: {product.itemData.description}</li>
           </ul>
         </div>
         <div>
           <div className="card p-5">
             <div className="mb-2 flex justify-between">
               <div>Price</div>
-              <div>${product.price}</div>
+              <div>
+                $
+                {product.itemData.variations[0].itemVariationData.priceMoney
+                  .amount / 100}
+              </div>
             </div>
             <div className="mb-2 flex justify-between">
               <div>Status</div>
-              <div>{product.countInStock > 0 ? 'In stock' : 'Unavailable'}</div>
+              <div>{stock > 0 ? 'In stock' : 'Unavailable'}</div>
             </div>
             <button
               className="primary-button w-full"
@@ -90,15 +111,17 @@ export default function ProductPage(props) {
 
 export async function getServerSideProps(context) {
   const { params } = context;
-  const { slug } = params;
+  const { id } = params;
 
-  await db.connect();
-  const product = await Product.findOne({ slug }).lean();
-  await db.disconnect();
+  const { data } = await axios({
+    method: 'POST',
+    url: `${process.env.BASE_URL}/api/square`,
+    data: { type: 'GET_ONE_CATALOG', id: id },
+  });
 
   return {
     props: {
-      product: product ? db.convertDocToObj(product) : null,
+      catalogObjects: data,
     },
   };
 }

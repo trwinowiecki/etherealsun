@@ -32,7 +32,11 @@ export default function Home() {
     const fetchCatalog = async () => {
       try {
         catalogDispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.post(`/api/square`);
+        const { data } = await axios({
+          method: 'POST',
+          url: `${process.env.BASE_URL}/api/square`,
+          data: { type: 'GET_ALL_CATALOG' },
+        });
         catalogDispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (error) {
         catalogDispatch({ type: 'FETCH_FAIL', payload: getError(error) });
