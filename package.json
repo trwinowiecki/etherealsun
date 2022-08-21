@@ -14,6 +14,7 @@
     "@square/web-sdk": "^2.0.1",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
+    "crypto": "^1.0.1",
     "js-cookie": "^3.0.1",
     "mongoose": "^6.5.0",
     "next": "12.2.3",

@@ -2,8 +2,8 @@ import { Client, Environment } from 'square';
 
 const handler = async (req, res) => {
   const client = new Client({
-    accessToken: process.env.SQUARE_ACCESS_TOKEN,
-    environment: Environment.Production,
+    accessToken: process.env.SQUARE_ACCESS_TOKEN_SANDBOX,
+    environment: Environment.Sandbox,
   });
 
   const catalog = await client.catalogApi.searchCatalogObjects({
