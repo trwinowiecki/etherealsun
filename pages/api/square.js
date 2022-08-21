@@ -34,6 +34,17 @@ const getOneCatalog = async (client, id) => {
   return covertToJSON(response);
 };
 
+const getOneInventory = async (client, id) => {
+  let response;
+  try {
+    response = await client.inventoryApi.retrieveInventoryCount(id);
+  } catch (error) {
+    response = error;
+  }
+
+  return covertToJSON(response);
+};
+
 const handler = async (req, res) => {
   const client = new Client({
     accessToken: process.env.SQUARE_ACCESS_TOKEN_PROD,
@@ -49,6 +60,10 @@ const handler = async (req, res) => {
       break;
     case 'GET_ONE_CATALOG':
       data = await getOneCatalog(client, req.body.id);
+      res.status(200).send(data);
+      break;
+    case 'GET_ONE_INVENTORY':
+      data = await getOneInventory(client, req.body.id);
       res.status(200).send(data);
       break;
     default:

@@ -20,8 +20,6 @@ export default function ProductPage(props) {
     );
   }
 
-  console.log(catalogObjects);
-
   const product = catalogObjects.object;
   const images = catalogObjects.relatedObjects.filter(
     (object) => object.type === 'IMAGE'
@@ -38,13 +36,22 @@ export default function ProductPage(props) {
   }
 
   const addToCartHandler = async () => {
-    const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
+    const existItem = state.cart.cartItems.find(
+      (x) => x.id === product.itemData.variations[0].id
+    );
     const quantity = existItem ? existItem.quantity + 1 : 1;
-    const { data } = await axios.get(`/api/products/${product._id}`);
+    // const { data } = await axios({
+    //   method: 'POST',
+    //   url: `${process.env.BASE_URL}/api/square`,
+    //   data: {
+    //     type: 'GET_ONE_INVENTORY',
+    //     id: product.itemData.variations[0].id,
+    //   },
+    // });
 
-    if (data.countInStock < quantity) {
-      return toast.error('Sorry. Product not in stock');
-    }
+    // if (data.countInStock < quantity) {
+    //   return toast.error('Sorry. Product not in stock');
+    // }
 
     dispatch({
       type: 'CART_ADD_ITEM',
