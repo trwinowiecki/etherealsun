@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getPlaiceholder } from 'plaiceholder';
 import { useContext, useEffect, useReducer } from 'react';
 import { toast } from 'react-toastify';
 import Layout from '../components/Layout';
@@ -19,7 +20,7 @@ function reducer(state, action) {
   }
 }
 
-export default function Home() {
+export default function Home({ images }) {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
 
@@ -34,7 +35,7 @@ export default function Home() {
         catalogDispatch({ type: 'FETCH_REQUEST' });
         const { data } = await axios({
           method: 'POST',
-          url: `${process.env.BASE_URL}/api/square`,
+          url: `/api/square`,
           data: { type: 'GET_ALL_CATALOG' },
         });
         catalogDispatch({ type: 'FETCH_SUCCESS', payload: data });
@@ -45,18 +46,18 @@ export default function Home() {
     fetchCatalog();
   }, []);
 
-  const addToCartHandler = async (product) => {
-    const existItem = cart.cartItems.find((x) => x.slug === product.slug);
+  const addToCartHandler = async (product, image) => {
+    const existItem = cart.cartItems.find((x) => x.id === product.id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
-    const { data } = await axios.get(`/api/products/${product._id}`);
+    // const { data } = await axios.get(`/api/products/${product._id}`);
 
-    if (data.countInStock < quantity) {
-      return toast.error('Sorry. Product is out of stock');
-    }
+    // if (data.countInStock < quantity) {
+    //   return toast.error('Sorry. Product is out of stock');
+    // }
 
     dispatch({
       type: 'CART_ADD_ITEM',
-      payload: { ...product, quantity },
+      payload: { ...product, image: image, quantity },
     });
 
     toast.success('Product added to the cart');
@@ -77,9 +78,15 @@ export default function Home() {
                   key={object.id}
                   product={object}
                   addToCartHandler={addToCartHandler}
-                  images={catalog.relatedObjects.filter(
-                    (object) => object.type === 'IMAGE'
-                  )}
+                  images={
+                    object.itemData.imageIds
+                      ? Object.values(images).filter((image) => {
+                          return object.itemData.imageIds.includes(image.id);
+                        })
+                      : Object.values(images).filter((image) => {
+                          return image.id === 'DEFAULT';
+                        })
+                  }
                 />
               );
             }
@@ -90,3 +97,39 @@ export default function Home() {
     </Layout>
   );
 }
+
+export const getStaticProps = async () => {
+  const { data } = await axios({
+    method: 'POST',
+    url: `${process.env.BASE_URL}/api/square`,
+    data: { type: 'GET_ALL_CATALOG' },
+  });
+
+  const images = data.relatedObjects
+    .filter((object) => object.type === 'IMAGE')
+    .map((image) => {
+      return { id: image.id, url: image.imageData.url };
+    });
+
+  let imgs = images.map(async (image) => {
+    const { base64, img } = await getPlaiceholder(image.url);
+    return { id: image.id, blurDataURL: base64, ...img };
+  });
+
+  const { base64, img } = await getPlaiceholder('/images/earring1.jpg');
+  imgs.push({
+    id: 'DEFAULT',
+    blurDataURL: base64,
+    ...img,
+  });
+
+  let allImages = await Promise.all(imgs);
+
+  return {
+    props: {
+      images: {
+        ...allImages,
+      },
+    },
+  };
+};
