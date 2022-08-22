@@ -51,19 +51,19 @@ function CartPage() {
               </thead>
               <tbody>
                 {cartItems.map((item) => (
-                  <tr key={item.slug} className="border-b">
+                  <tr key={item.id} className="border-b">
                     <td>
-                      <Link href={`/product/${item.slug}`}>
+                      <Link href={`/product/${item.id}`}>
                         <a className="flex items-center">
                           <Image
                             src={item.image}
-                            alt={item.name}
+                            alt={item.itemData.name}
                             width={50}
                             height={50}
                             objectFit="cover"
                           ></Image>
                           &nbsp;
-                          {item.name}
+                          {item.itemData.name}
                         </a>
                       </Link>
                     </td>
@@ -74,14 +74,23 @@ function CartPage() {
                           updateCartHandler(item, e.target.value)
                         }
                       >
-                        {[...Array(item.countInStock).keys()].map((x) => (
+                        {[...Array(item.quantity).keys()].map((x) => (
                           <option key={x + 1} value={x + 1}>
                             {x + 1}
                           </option>
                         ))}
+                        {/* {[...Array(item.countInStock).keys()].map((x) => (
+                          <option key={x + 1} value={x + 1}>
+                            {x + 1}
+                          </option>
+                        ))} */}
                       </select>
                     </td>
-                    <td className="p-5 text-right">${item.price}</td>
+                    <td className="p-5 text-right">
+                      $
+                      {item.itemData.variations[0].itemVariationData.priceMoney
+                        .amount / 100}
+                    </td>
                     <td className="p-5 text-center">
                       <button onClick={() => removeItemHandler(item)}>
                         <XCircleIcon className="h-5 w-5"></XCircleIcon>

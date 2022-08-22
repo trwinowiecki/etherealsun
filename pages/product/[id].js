@@ -55,7 +55,7 @@ export default function ProductPage(props) {
 
     dispatch({
       type: 'CART_ADD_ITEM',
-      payload: { ...product, quantity },
+      payload: { ...product, image: images[0], quantity },
     });
     router.push('/cart');
   };

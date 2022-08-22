@@ -12,13 +12,14 @@ const initialState = {
 function reducer(state, action) {
   switch (action.type) {
     case 'CART_ADD_ITEM': {
+      console.log(action.payload);
       const newItem = action.payload;
       const existItem = state.cart.cartItems.find(
         (item) => item.id === newItem.id
       );
       const cartItems = existItem
         ? state.cart.cartItems.map((item) =>
-            item.name === existItem.name ? newItem : item
+            item.itemData.name === existItem.itemData.name ? newItem : item
           )
         : [...state.cart.cartItems, newItem];
       Cookies.set('cart', JSON.stringify({ ...state.cart, cartItems }));
