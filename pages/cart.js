@@ -56,11 +56,12 @@ function CartPage() {
                       <Link href={`/product/${item.id}`}>
                         <a className="flex items-center">
                           <Image
-                            src={item.image}
+                            {...item.image}
                             alt={item.itemData.name}
                             width={50}
                             height={50}
                             objectFit="cover"
+                            placeholder="blur"
                           ></Image>
                           &nbsp;
                           {item.itemData.name}
